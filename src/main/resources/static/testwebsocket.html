@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script>
+    var ws;
+    var num = 100;
+    function init() {
+        if("WebSocket" in window) {
+            alert("支持websocket");
+            ws = new WebSocket("ws://localhost:8080/websocket/server");
+            ws.onopen = function (msg) {
+                console.log(msg);
+            }
+            ws.onmessage = function (evt) {
+                console.log(evt.data);
+                document.getElementById("msg").innerHTML = evt.data;
+            }
+            ws.onclose = function (p1) {
+                console.log("close");
+            }
+            ws.onerror = function (event) {
+                console.log("error");
+            }
+        }
+        else
+        {
+            alert("不支持websocket");
+        }
+    }
+
+    //定时发送信息到后台
+    function send(){
+        ws.send(num);
+    }
+    //
+//    setInterval(function () {
+//    }, 1000);
+</script>
+<body>
+    <div style="width: 200px; height: 200px; margin: auto">
+        <button onclick="init()">初始化</button>
+        <button onclick="send()">发送</button>
+        <input id="msg" value=""/>
+    </div>
+</body>
+</html>
